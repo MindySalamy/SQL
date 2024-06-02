@@ -1,0 +1,323 @@
+--Created by Mindy Salamy 5/31/2024.
+-- Database source provided from LinkedIn learning SQL Essential Training Certificate Course. 
+--Database Name: WSDA_Music, 11 tables. 
+
+--This query displays all customers first, last names and their emails. 
+select FirstName as [Customer First Name], LastName as [Customer Last Name], 
+Email as [EMAIL]
+from Customer;
+
+--This query displays all customers first names, emails and last names in asc order. 
+select FirstName as [Customer First Name], LastName as [Customer Last Name], 
+Email as [EMAIL]
+from Customer
+order by LastName asc;
+
+--This query displays all customer first names, email and last names in desc order. 
+select FirstName as [Customer First Name], LastName as [Customer Last Name], 
+Email as [EMAIL]
+from Customer
+order by LastName desc;
+
+--This query displays all customers first names in asc order, last name in desc order and their emails. 
+select FirstName as [Customer First Name], LastName as [Customer Last Name], 
+email
+from Customer 
+order by FirstName asc,LastName desc;
+
+--This query displays the top 10 customes first names in asc order, last names in desc order, and their emails. 
+select FirstName as [Customer First Name], LastName as [Customer Last Name], 
+email
+from Customer 
+order by FirstName asc,LastName desc
+limit 10;
+
+--This query displays all customers first, last names and their phone numbers. 
+select FirstName as [Customer First Name], LastName as [Customer Last Name], 
+Phone as [PHONE]
+from Customer;
+
+--This query displays the top 20 Track Names and their Prices. 
+Select Name as [Track name], UnitPrice as Price
+from Track
+order by [Track name]
+limit 20;
+
+--Same results provided as above query but qeurying a diffrent way by renaming track as t. 
+select t.name as [Track Name], t.unitprice as Price
+from Track as t
+order by t.name
+limit 20;
+
+--This query displays how many invoices are at $1.98. 
+select InvoiceDate, BillingAddress, BillingCity, Total
+from Invoice
+where total = 1.98
+order by InvoiceDate; 
+
+--This query displays how many invoices exist bewteen $1.98 and $5.00. 
+select InvoiceDate, BillingAddress, BillingCity, Total
+from Invoice
+where total Between 1.98 and 5.00
+order by InvoiceDate;
+
+--This query displays how many invoices are exatly $1.98 or $3.96. 
+select InvoiceDate, BillingAddress, BillingCity, Total
+from Invoice
+where Total in (1.98, 3.96)
+order by InvoiceDate;
+
+--This query displays how many invoices were billed to the city of Brussels. 
+select InvoiceDate, BillingAddress, BillingCity, Total
+from Invoice
+where BillingCity = 'Brussels'
+order by Invoicedate;
+
+--This query displays how many invoices were billed to the city of Lisbon. 
+select InvoiceDate, BillingAddress, BillingCity, Total
+from Invoice
+where BillingCity = 'Lisbon'
+order by Invoicedate;
+
+--This query displays how many invoices were billed to the cities if Brussels, Orlando, and Paris. 
+Select InvoiceDate, BillingAddress, BillingCity, Total
+from Invoice
+where BillingCity in ('Brussels', 'Orlando', 'Paris')
+order by Invoicedate;
+
+--This query displays how many invoices were billed in cities that start with B. 
+Select InvoiceDate, BillingAddress, BillingCity, Total
+from Invoice
+where BillingCity like 'B%'
+order by Invoicedate;
+
+--This query displays how many invoices were billed t cities that have a B anywhere in its name. 
+Select InvoiceDate, BillingAddress, BillingCity, Total
+from Invoice
+where BillingCity like '%B%'
+order by Invoicedate;
+
+--This query displays how many invoices were billed on May 22, 2010. 
+Select InvoiceDate, BillingAddress, BillingCity, Total
+from Invoice
+where InvoiceDate = '2010-05-22 00:00:00'
+order by Invoicedate;
+
+--This query displays how many invoices were billed on May 22, 2010 using the DATE function. 
+Select InvoiceDate, BillingAddress, BillingCity, Total
+from Invoice
+where DATE(InvoiceDate) = '2010-05-22'
+order by Invoicedate;
+
+--This query displays all invoices that were billed after May 22, 2010, and have a total of less than $3. 
+Select InvoiceDate, BillingAddress, BillingCity, Total
+from Invoice
+where DATE(InvoiceDate)>'2010-05-22' and total <3.00
+order by Invoicedate;
+
+--This query displays all invoices with the billing city starting with P or with D.
+Select InvoiceDate, BillingAddress, BillingCity, Total
+from Invoice 
+where (BillingCity) like 'P%' or (BillingCity) like 'D%'
+order by InvoiceDate;
+
+--This query displays all invoices greater than $1.98 from any cities whose name start with P or D. 
+Select InvoiceDate, BillingAddress, BillingCity, Total
+from Invoice
+Where Total > 1.98 and (BillingCity like 'P%' or BillingCity like 'D%')
+order by InvoiceDate;
+
+--Sales Categories 
+--Baseline Purchases Between $0.99 and $1.99
+--Low Purchases Betweeen $2 and $6.99
+--Target Purchases Between $7 and $15
+--Top Performer Above $15.00 
+
+--This query displays results for a sales goal of as many cutomers as possible to spend between $7.00 and $15.00. 
+Select InvoiceDate, BillingAddress,BillingCity,Total,
+Case 
+when Total < 2.00 then 'Baseline Purchase'
+when Total between 2.00 and 6.99 then 'Low Purchase'
+when Total between 7.00 and 15.00 then 'Target Purchase'
+else 'Top Performer'
+end as 'Purchase Type'
+from Invoice
+Order by BillingCity;
+
+--This query displays results for which cities top-performing sales come from. '
+Select InvoiceDate, BillingAddress,BillingCity,Total,
+Case 
+when Total < 2.00 then 'Baseline Purchase'
+when Total between 2.00 and 6.99 then 'Low Purchase'
+when Total between 7.00 and 15.00 then 'Target Purchase'
+else 'Top Performer'
+end as 'PurchaseType'
+from Invoice
+where(PurchaseType) = 'Top Performer'
+Order by BillingCity;
+
+--This query displays results from the tables Invoice and Customer. 
+Select * 
+from Invoice
+inner join 
+Customer
+on 
+invoice.CustomerId = customer.CustomerId;
+
+--This query displays results from the Invoice and Customer tables ordered by CustomerID using a inner join. 
+Select C.LastName,
+C.FirstName,
+I.InvoiceId,
+I.CustomerId,
+I.InvoiceDate,
+I.Total
+from Invoice as I
+inner join 
+Customer as C
+on 
+I.CustomerId = C.CustomerId
+order by I.CustomerId;
+
+--This query displays results from Customer and Invoice tables ordered by CustomerId using a left join. 
+Select C.LastName,
+C.FirstName,
+I.InvoiceId,
+I.CustomerId,
+I.InvoiceDate,
+I.Total
+from Invoice as I
+left outer join 
+Customer as C
+on 
+I.CustomerId = C.CustomerId
+order by I.CustomerId;
+
+--This query would display results from the Customer and Invoice tables using a right join ordered by CustomerId. 
+Select C.LastName,
+C.FirstName,
+I.InvoiceId,
+I.CustomerId,
+I.InvoiceDate,
+I.Total
+from Invoice as I
+right outer join 
+Customer as C
+on 
+I.CustomerId = C.CustomerId
+order by I.CustomerId;
+
+--This query displays which employees are responsible for the 10 highest individual sales using joins on more than 2 tables. 
+select e.FirstName,
+e.LastName,
+e.EmployeeId,
+c.FirstName,
+c.LastName,
+c.SupportRepId,
+i.CustomerId,
+i.Total
+from Invoice as i
+inner join
+Customer as c
+on i.CustomerId = c.CustomerId
+inner join
+Employee as e
+on c.SupportRepId = e.EmployeeId
+order by i.Total desc
+limit 10;
+
+--This query displays all customers along with their assigned support representative using a join. 
+select c.FirstName as CustomerFirstName,
+c.LastName as CustomerLastName, 
+e.FirstName as SupportRepFirstName,
+e.LastName as SupportRepLastName
+from Customer as c
+join 
+Employee as e
+on c.SupportRepId = e.EmployeeId
+order by e.LastName, c.LastName;
+
+--This query displays results using a string concatenation. 
+select
+FirstName, 
+LastName, 
+Address,
+FirstName||' '||LastName||' '||Address||','||City||' '||State||' '||PostalCode as [Mailing Address]
+from Customer
+Where Country = 'USA'; 
+
+--This query displays results for average invoice amount by billing city.
+select BillingCity,
+round(avg(Total),2)
+from Invoice
+group by BillingCity
+order by BillingCity;
+
+--This query displays the average invoice amount for only the cities beginning with L. 
+select BillingCity,
+round(avg(Total),2)
+from Invoice
+where BillingCity like 'L%'
+group by BillingCity
+order by BillingCity;
+
+--This query displays all average invoice totals greater than $5 ordered by city. 
+select BillingCity,
+round(avg(Total),2)
+from Invoice
+group by BillingCity
+having avg(total) >5
+order by BillingCity;
+
+--This query displays all average invoice totals greater than $5 with cities beginning with B.
+select BillingCity,
+round(avg(Total),2)
+from Invoice
+where BillingCity like 'B%'
+group by BillingCity
+having avg(total) >5
+order by BillingCity;
+
+--This query displays all average invoice totals by billing country and city. 
+select BillingCountry,
+BillingCity,
+round(avg(Total),2)
+from Invoice
+group by BillingCountry, BillingCity
+order by BillingCountry; 
+
+--This query displays the average spending amount of customers in each city.
+select BillingCity as City,
+round(avg(Total),2) as AverageSpending
+from Invoice
+group by BillingCity, 'AverageSpending'
+order by 'City' asc;
+
+--This query displays results for all invoices that are less than the average, which is $8.06. 
+select InvoiceDate, 
+BillingAddress,
+BillingCity,
+Total
+from Invoice
+where Total <
+(select avg(Total) from Invoice)
+order by Total desc;
+
+--This query displays how each individual city is performing against the global average sales. 
+select BillingCity, 
+avg(Total) as [City Average],
+(select avg(Total) from invoice) as [Global Average]
+from Invoice
+group by BillingCity
+order by BillingCity;
+
+--This query displays how many customers last names begin with G. 
+select FirstName,
+LastName
+from Customer
+where Customer.LastName like 'G%'
+order by Customer.LastName asc;
+
+--This query displays which track name appears at the top of the table when sorted in desc order.
+select Track.Name
+from Track
+order by Track.Name desc;
