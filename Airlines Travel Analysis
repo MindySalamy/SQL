@@ -1,0 +1,95 @@
+-- SQL Querying - Airlines Travel Database
+--Created by Mindy Salamy 6/3/2024.
+-- Database source provided from Kaggle. Link: https://www.kaggle.com/datasets/fiazbhk/airline-data-analysis
+
+--This query displays all Passenger Ids in asc order. 
+select passenger_id as [Passenger ID]
+from tickets
+order by [Passenger Id] asc;
+
+--This query displays results from the Tickets and Boarding Passes tables. 
+select *
+from tickets
+inner join boarding_passes
+on tickets.ticket_no = boarding_passes.ticket_no
+order by 'ticket_no' asc;
+
+--This query displays how many flights were delayed.
+select COUNT(flight_id), 
+status
+from flights
+where flights.status = 'Delayed'
+order by flights.flight_id asc;
+
+--This query displays how many flights were on time. 
+select COUNT(flight_id),
+status
+from flights
+where flights.status = 'On Time'
+order by flights.flight_id asc;
+
+--This query displays the average number of flight bookings. 
+select book_ref as [Booking Referance],
+book_date as [Booking Date],
+round(avg(total_amount),2) as [Average Amount]
+from bookings
+group by 'Booking Date', 'Average Amount'
+order by 'Booking Date';
+
+--This query is exploring the data from the table Aircrafts Data. 
+select * 
+from aircrafts_data; 
+
+--This query is ecploring the data from the Flights table. 
+select *
+from flights;
+
+--This query displays the aircraft models and their # of flights. 
+select model as [Aircraft Model],
+COUNT(flights.flight_id) as [Number of Flights]
+from aircrafts_data
+left join flights on aircrafts_data.aircraft_code = flights.aircraft_code
+group by aircrafts_data.model
+order by 'Aircraft Model' asc;
+
+--This query displays aircraft models and their range. 
+select aircraft_code as [Aircraft Code],
+model as [Aircraft Model], 
+aircrafts_data.range as [Aircraft Range]
+from aircrafts_data
+order by'Aircraft Range' desc;
+
+--This query displays which aircraft model has the most range. 
+Select aircrafts_data.model as [Aircraft Model],
+ MAX(aircrafts_data.range) as [Aircraft Range]
+from aircrafts_data
+limit 1;
+
+--This query displays all the number of seats for each Aircraft model. 
+ select aircraft_code as [Aircraft Code],
+ model as [Aircraft Model],
+ COUNT(seats.seat_no) as [Count of Seats]
+ from aircrafts_data
+ join seats on aircrafts_data.aircraft_code = seats.aircraft_code
+ group by model;
+
+--This wuery displays all booking dates for and after this date 2017-07-31. 
+select book_date
+from bookings
+where book_date >= '2017-07-31';
+
+--This query displays the minumum ticket amount. 
+select MIN(amount) as [Smallest Ticket Amount]
+from ticket_flights; 
+
+--This query displays the maximum ticket amount. 
+select MAX(amount) as [Largest Ticket Amount]
+from ticket_flights;
+
+--This query displays the average amount of tickets. 
+select AVG (amount) as [Average Ticket Amount]
+from ticket_flights;
+
+--This query displays the sum amount of tickets. 
+select SUM(amount) as [Sum Ticket Amount]
+from ticket_flights;
