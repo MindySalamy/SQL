@@ -1,95 +1,98 @@
--- SQL Querying - Airlines Travel Database
---Created by Mindy Salamy 6/3/2024.
--- Database source provided from Kaggle. Link: https://www.kaggle.com/datasets/fiazbhk/airline-data-analysis
+--This Airlines Travel Dataset is sourced from Kaggle, and primarily for personal exploratory purposes. Dataset link: https://www.kaggle.com/datasets/fiazbhk/airline-data-analysis 
 
---This query displays all Passenger Ids in asc order. 
-select passenger_id as [Passenger ID]
-from tickets
-order by [Passenger Id] asc;
+--I want to see all Passenger IDs from smallest to largest. 
+SELECT passenger_id AS [Passenger ID]
+FROM tickets
+ORDER BY [Passenger Id] ASC;
 
---This query displays results from the Tickets and Boarding Passes tables. 
-select *
-from tickets
-inner join boarding_passes
-on tickets.ticket_no = boarding_passes.ticket_no
-order by 'ticket_no' asc;
+--I want to see data from the tickets table and boarding passes table.
+SELECT *
+FROM tickets
+INNER JOIN boarding_passes
+ON tickets.ticket_no = boarding_passes.ticket_no
+ORDER BY 'ticket_no' ASC;
 
---This query displays how many flights were delayed.
-select COUNT(flight_id), 
+--I want to know how many flights were dealyed. 
+SELECT COUNT(flight_id), 
 status
-from flights
-where flights.status = 'Delayed'
-order by flights.flight_id asc;
+FROM flights
+WHERE flights.status = 'Delayed'
+ORDER BY flights.flight_id ASC;
 
---This query displays how many flights were on time. 
-select COUNT(flight_id),
+--I want to see how many flights were on time.
+SELECT COUNT(flight_id),
 status
-from flights
-where flights.status = 'On Time'
-order by flights.flight_id asc;
+FROM flights
+WHERE flights.status = 'On Time'
+ORDER BY flights.flight_id ASC;
 
---This query displays the average number of flight bookings. 
-select book_ref as [Booking Referance],
-book_date as [Booking Date],
-round(avg(total_amount),2) as [Average Amount]
-from bookings
-group by 'Booking Date', 'Average Amount'
-order by 'Booking Date';
+--I want to know the average amount of bookings. 
+SELECT book_ref AS [Booking Referance],
+book_date AS [Booking Date],
+round(avg(total_amount),2) AS [Average Amount]
+FROM bookings
+GROUP BY 'Booking Date', 'Average Amount'
+ORDER BY 'Booking Date';
 
---This query is exploring the data from the table Aircrafts Data. 
-select * 
-from aircrafts_data; 
+--Further data exploration. 
+SELECT * 
+FROM aircrafts_data; 
 
---This query is ecploring the data from the Flights table. 
-select *
-from flights;
+--Further data exploration. 
+SELECT *
+FROM flights;
 
---This query displays the aircraft models and their # of flights. 
-select model as [Aircraft Model],
-COUNT(flights.flight_id) as [Number of Flights]
-from aircrafts_data
-left join flights on aircrafts_data.aircraft_code = flights.aircraft_code
-group by aircrafts_data.model
-order by 'Aircraft Model' asc;
+--Further data exploration. 
+SELECT *
+FROM airports_data;
 
---This query displays aircraft models and their range. 
-select aircraft_code as [Aircraft Code],
-model as [Aircraft Model], 
-aircrafts_data.range as [Aircraft Range]
-from aircrafts_data
-order by'Aircraft Range' desc;
+--I want to see the number of flights by aircraft model. 
+SELECT model AS [Aircraft Model],
+COUNT(flights.flight_no) AS [Number of Flights]
+FROM aircrafts_data
+JOIN flights ON aircrafts_data.aircraft_code = flights.aircraft_code
+GROUP BY aircrafts_data.model
+ORDER BY aircrafts_data.model ASC;
 
---This query displays which aircraft model has the most range. 
-Select aircrafts_data.model as [Aircraft Model],
- MAX(aircrafts_data.range) as [Aircraft Range]
-from aircrafts_data
-limit 1;
+--I want to know the range or distance of each aircraft model. 
+SELECT aircraft_code AS [Aircraft Code],
+model AS [Aircraft Model], 
+aircrafts_data.range AS [Aircraft Range]
+FROM aircrafts_data
+ORDER BY 'Aircraft Range' DESC;
 
---This query displays all the number of seats for each Aircraft model. 
- select aircraft_code as [Aircraft Code],
- model as [Aircraft Model],
- COUNT(seats.seat_no) as [Count of Seats]
- from aircrafts_data
- join seats on aircrafts_data.aircraft_code = seats.aircraft_code
- group by model;
+--I want to see which aircraft model has the most range or distance. 
+SELECT aircrafts_data.model AS [Aircraft Model],
+ MAX(aircrafts_data.range) AS [Aircraft Range]
+FROM aircrafts_data
+LIMIT 1;
 
---This wuery displays all booking dates for and after this date 2017-07-31. 
-select book_date
-from bookings
-where book_date >= '2017-07-31';
+--I want to see the number of seats by aircraft model. 
+ SELECT aircraft_code AS [Aircraft Code],
+ model AS [Aircraft Model],
+ COUNT(seats.seat_no) AS [Count of Seats]
+ FROM aircrafts_data
+ JOIN seats ON aircrafts_data.aircraft_code = seats.aircraft_code
+GROUP BY model;
 
---This query displays the minumum ticket amount. 
-select MIN(amount) as [Smallest Ticket Amount]
-from ticket_flights; 
+--I want to see all booking dates for and after 2017-07-31. 
+SELECT book_date
+FROM bookings
+WHERE book_date >= '2017-07-31';
 
---This query displays the maximum ticket amount. 
-select MAX(amount) as [Largest Ticket Amount]
-from ticket_flights;
+--I want to know the minimum ticket amount. 
+SELECT MIN(amount) AS [Smallest Ticket Amount]
+FROM ticket_flights; 
 
---This query displays the average amount of tickets. 
-select AVG (amount) as [Average Ticket Amount]
-from ticket_flights;
+--I want to see the largest ticket amount. 
+SELECT MAX(amount) AS [Largest Ticket Amount]
+FROM ticket_flights;
 
---This query displays the sum amount of tickets. 
-select SUM(amount) as [Sum Ticket Amount]
-from ticket_flights;
+--What's the average ticket amount?
+SELECT AVG (amount) AS [Average Ticket Amount]
+FROM ticket_flights;
+
+--What is the sum of ticket amounts? 
+SELECT SUM(amount) AS [Sum Ticket Amount]
+FROM ticket_flights;
+
